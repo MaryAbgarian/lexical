@@ -27,6 +27,7 @@ export default class FileUploadDownload extends React.Component {
         // Prepare the file
         var output;
         if (event.target.innerHTML === "Save") {
+            this.setState({ fileType: "json" });
             output = JSON.stringify(this.props.json);
         }
         else if (event.target.innerHTML === "Export") {

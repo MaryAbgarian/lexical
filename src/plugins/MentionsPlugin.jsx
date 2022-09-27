@@ -53,7 +53,7 @@ const VALID_JOINS =
 
 const LENGTH_LIMIT = 75;
 
-const AtSignMentionsRegex = new RegExp(
+const DollarSignMentionsRegex = new RegExp(
   '(^|\\s|\\()(' +
   '[' +
   TRIGGERS +
@@ -71,7 +71,7 @@ const AtSignMentionsRegex = new RegExp(
 const ALIAS_LENGTH_LIMIT = 50;
 
 // Regex used to match alias.
-const AtSignMentionsRegexAliasRegex = new RegExp(
+const DollarSignMentionsRegexAliasRegex = new RegExp(
   '(^|\\s|\\()(' +
   '[' +
   TRIGGERS +
@@ -163,10 +163,10 @@ function checkForDollarSignMentions(
   text,
   minMatchLength,
 ) {
-  let match = AtSignMentionsRegex.exec(text);
+  let match = DollarSignMentionsRegex.exec(text);
 
   if (match === null) {
-    match = AtSignMentionsRegexAliasRegex.exec(text);
+    match = DollarSignMentionsRegexAliasRegex.exec(text);
   }
   if (match !== null) {
     // The strategy ignores leading whitespace but we need to know it's
