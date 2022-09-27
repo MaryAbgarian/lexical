@@ -14,18 +14,16 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import ToolbarPlugin from "./plugins/ToolbarPlugin";
-import TreeViewPlugin from "./plugins/TreeViewPlugin";
-import ExampleTheme from "./themes/ExampleTheme";
+import { $getRoot } from 'lexical';
 import { MentionNode } from './nodes/MentionNode.jsx';
+// import ActionsPlugin from "./plugins/ActionsPlugin.js";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
-import UpdatePlugin from "./plugins/UpdatePlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
-import { CLEAR_HISTORY_COMMAND } from "lexical";
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import MentionsPlugin from "./plugins/MentionsPlugin";
 import SetEditorPlugin from "./plugins/SetEditorPlugin";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import ExampleTheme from "./themes/ExampleTheme";
 // import { MentionsInput, Mention } from 'react-mentions'
 
 function Placeholder() {
@@ -99,14 +97,17 @@ const desiredUpdate = {
   version: "0.3.6",
 };
 
-export default function Editor({ setHTML, setJSON, setEditor }) {
+export default function Editor({ setHTML = () => { }, setJSON = () => { }, setEditor = () => { }, setTemplateVariables = () => { } }) {
 
   const onChange = (editorState, editor) => {
     editor.update(() => {
       const rawHTML = $generateHtmlFromNodes(editor, null)
-      const rawJSON = JSON.stringify(editorState);
+      const editorStateTextString = editorState.read(() => $getRoot().getTextContent());
+
+      // const rawJSON = JSON.stringify(editorState);
       setHTML(rawHTML);
-      setJSON(rawJSON);
+      setJSON(editorState);
+      setTemplateVariables(editorStateTextString);
     });
   }
 
@@ -120,15 +121,14 @@ export default function Editor({ setHTML, setJSON, setEditor }) {
             placeholder={<Placeholder />}
           />
           <HistoryPlugin />
-          <TreeViewPlugin />
           <AutoFocusPlugin />
           <CodeHighlightPlugin />
           <ListPlugin />
           <LinkPlugin />
-          <AutoLinkPlugin />
-          <UpdatePlugin />
+          {/* <AutoLinkPlugin /> */}
           <SetEditorPlugin setEditor={setEditor} />
           <MentionsPlugin />
+          {/* <ActionsPlugin /> */}
           <OnChangePlugin onChange={onChange} />
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />

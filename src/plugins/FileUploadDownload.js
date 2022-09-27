@@ -15,25 +15,39 @@ export default class FileUploadDownload extends React.Component {
             status: "",
             data: props.json
         }
-        this.changeFileType = this.changeFileType.bind(this);
         this.download = this.download.bind(this);
         this.upload = this.upload.bind(this);
         this.openFile = this.openFile.bind(this);
     }
 
-    changeFileType(event) {
-        const value = event.target.value;
-        this.setState({ fileType: value.fileType });
-    }
 
     download(event) {
+        console.log(event)
         event.preventDefault();
         // Prepare the file
-        let output;
-        if (this.state.fileType === "json") {
-            output = JSON.stringify({ states: this.state.data },
-                null, 4);
+        var output;
+        if (event.target.innerHTML === "Save") {
+            output = JSON.stringify(this.props.json);
         }
+        else if (event.target.innerHTML === "Export") {
+            this.setState({ fileType: "html" });
+            const templateVariables = this.props.templateVariables;
+            const templateVariablesArray = templateVariables.split(",");
+            const templateVariablesHash = {};
+            output = this.props.html;
+            debugger;
+            templateVariablesArray.forEach(keyValString => {
+                const keyValArray = keyValString.split("=");
+                const key = keyValArray[0];
+                const val = keyValArray[1];
+                const regex = new RegExp(`\\${key}`, "g");
+                output = output.replace(regex, val);
+                debugger;
+            });
+
+            console.log(output);
+        }
+
         // Download it
         const blob = new Blob([output]);
         const fileDownloadUrl = URL.createObjectURL(blob);
@@ -90,8 +104,8 @@ export default class FileUploadDownload extends React.Component {
             <div>
                 <form>
 
-                    <button onClick={this.download}>
-                        Download
+                    <button onClick={this.download} style={{ display: 'inline', marginRight: '2%' }}>
+                        Save
                     </button>
 
                     <a className="hidden"
@@ -100,9 +114,9 @@ export default class FileUploadDownload extends React.Component {
                         ref={e => this.dofileDownload = e}
                     ></a>
 
-                    <p><button onClick={this.upload}>
+                    <button onClick={this.upload} style={{ display: 'inline', marginRight: '2%' }}>
                         Load
-                    </button></p>
+                    </button>
 
                     <input type="file" className="hidden" style={{ display: 'none' }}
                         multiple={false}
@@ -110,8 +124,12 @@ export default class FileUploadDownload extends React.Component {
                         onChange={evt => this.openFile(evt)}
                         ref={e => this.dofileUpload = e}
                     />
+
+                    <button onClick={this.download} >
+                        Export
+                    </button>
+
                 </form>
-                <pre className="status">{this.state.status}</pre>
             </div>
         )
     }
