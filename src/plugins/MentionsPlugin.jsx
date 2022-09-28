@@ -22,7 +22,8 @@ import { $createMentionNode } from '../nodes/MentionNode';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
-const NAME = '\\b[A-Z][^\\s' + PUNCTUATION + ']';
+
+const NAME = '\\$\\b[A-Z][^\\s' + PUNCTUATION + ']';
 
 const DocumentMentionsRegex = {
   NAME,
@@ -38,7 +39,7 @@ const PUNC = DocumentMentionsRegex.PUNCTUATION;
 const TRIGGERS = ['$'].join('');
 
 // Chars we expect to see in a mention (non-space, non-punctuation).
-const VALID_CHARS = '[^' + TRIGGERS + PUNC + '\\s]';
+const VALID_CHARS = '[^' + '\\s]';
 
 // Non-standard series of chars. Each series must be preceded and followed by
 // a valid char.
@@ -85,7 +86,7 @@ const DollarSignMentionsRegexAliasRegex = new RegExp(
 );
 
 // At most, 5 suggestions are shown in the popup.
-const SUGGESTION_LIST_LENGTH_LIMIT = 5;
+const SUGGESTION_LIST_LENGTH_LIMIT = 10;//changed to 10
 
 const mentionsCache = new Map();
 
@@ -96,7 +97,7 @@ const dummyMentionsData = [
   '$address'
 ];
 
-console.log(dummyMentionsData);
+// console.log(dummyMentionsData);
 
 const dummyLookupService = {
   search(string, callback) {
@@ -245,7 +246,7 @@ export default function NewMentionsPlugin() {
       results
         .map(
           (result) =>
-            new MentionTypeaheadOption(result, <i className="icon user" />),
+            new MentionTypeaheadOption(result),
         )
         .slice(0, SUGGESTION_LIST_LENGTH_LIMIT),
     [results],
@@ -288,7 +289,7 @@ export default function NewMentionsPlugin() {
         anchorElement,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
       ) =>
-        anchorElement && results.length
+        anchorElement || results.length//changed from and to or
           ? ReactDOM.createPortal(
             <ul>
               {options.map((option, i) => (

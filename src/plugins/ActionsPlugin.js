@@ -14,7 +14,6 @@ import {
 import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { mergeRegister } from '@lexical/utils';
-import { CONNECTED_COMMAND, TOGGLE_CONNECT_COMMAND } from '@lexical/yjs';
 import {
     $createTextNode,
     $getRoot,
@@ -25,13 +24,8 @@ import {
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
-import useModal from '../../hooks/useModal';
-import Button from '../../ui/Button';
-import { PLAYGROUND_TRANSFORMERS } from '../MarkdownTransformers';
-import {
-    SPEECH_TO_TEXT_COMMAND,
-    SUPPORT_SPEECH_RECOGNITION,
-} from '../SpeechToTextPlugin';
+import Button from '../components/Button.jsx';
+
 
 async function sendEditorState(editor) {
     const stringifiedEditorState = JSON.stringify(editor.getEditorState());

@@ -1,4 +1,6 @@
 import React from 'react';
+import ActionsPlugin from "./ActionsPlugin.js";
+import Button from "../components/Button.jsx";
 
 export default class FileUploadDownload extends React.Component {
     constructor(props) {
@@ -22,7 +24,6 @@ export default class FileUploadDownload extends React.Component {
 
 
     download(event) {
-        console.log(event)
         event.preventDefault();
         // Prepare the file
         var output;
@@ -33,7 +34,7 @@ export default class FileUploadDownload extends React.Component {
         else if (event.target.innerHTML === "Export") {
             this.setState({ fileType: "html" });
             const templateVariables = this.props.templateVariables;
-            const templateVariablesArray = templateVariables.split(",");
+            const templateVariablesArray = templateVariables.split(", ");
             const templateVariablesHash = {};
             output = this.props.html;
             debugger;
@@ -103,11 +104,11 @@ export default class FileUploadDownload extends React.Component {
     render() {
         return (
             <div>
-                <form>
+                <form style={{ marginLeft: "4%" }}>
 
-                    <button onClick={this.download} style={{ display: 'inline', marginRight: '2%' }}>
+                    <Button onClick={this.download}  >
                         Save
-                    </button>
+                    </Button>
 
                     <a className="hidden"
                         download={this.fileNames[this.state.fileType]}
@@ -115,20 +116,20 @@ export default class FileUploadDownload extends React.Component {
                         ref={e => this.dofileDownload = e}
                     ></a>
 
-                    <button onClick={this.upload} style={{ display: 'inline', marginRight: '2%' }}>
+                    <Button onClick={this.upload} >
                         Load
-                    </button>
+                    </Button>
 
                     <input type="file" className="hidden" style={{ display: 'none' }}
                         multiple={false}
-                        accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain"
+                        accept=".json"
                         onChange={evt => this.openFile(evt)}
                         ref={e => this.dofileUpload = e}
                     />
 
-                    <button onClick={this.download} >
+                    <Button onClick={this.download} >
                         Export
-                    </button>
+                    </Button>
 
                 </form>
             </div>

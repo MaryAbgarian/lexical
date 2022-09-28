@@ -278,7 +278,7 @@ pre::-webkit-scrollbar-thumb {
 
 #typeahead-menu ul li {
     margin: 0;
-    min-width: 180px;
+    min-width: 40px;
     font-size: 14px;
     outline: none;
     cursor: pointer;
@@ -495,9 +495,7 @@ i.diagram-2 {
     background-image: url(images/icons/diagram-2.svg);
 }
 
-i.user {
-    background-image: url(images/icons/user.svg);
-}
+
 
 i.equation {
     background-image: url(images/icons/plus-slash-minus.svg);

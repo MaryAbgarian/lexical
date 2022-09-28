@@ -16,18 +16,15 @@ import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { $getRoot } from 'lexical';
 import { MentionNode } from './nodes/MentionNode.jsx';
-// import ActionsPlugin from "./plugins/ActionsPlugin.js";
-import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import MentionsPlugin from "./plugins/MentionsPlugin";
 import SetEditorPlugin from "./plugins/SetEditorPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import ExampleTheme from "./themes/ExampleTheme";
-// import { MentionsInput, Mention } from 'react-mentions'
 
 function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
+  return <div className="editor-placeholder">Type '$$' to view all variables or  '$' followed by the first few letters of the desired <br /> variable to search for it.</div>;
 }
 
 const editorConfig = {
@@ -54,57 +51,12 @@ const editorConfig = {
   ]
 };
 
-function importJSON(serializedNode) {
-  const node = $createHeadingNode(serializedNode.tag);
-  node.setFormat(serializedNode.format);
-  node.setIndent(serializedNode.indent);
-  node.setDirection(serializedNode.direction);
-  return node;
-}
-
-const desiredUpdate = {
-  editorState: {
-    root: {
-      children: [
-        {
-          children: [
-            {
-              detail: 0,
-              format: 0,
-              mode: "normal",
-              style: "",
-              text: "Updating the editor",
-              type: "text",
-              version: 1,
-            },
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "paragraph",
-          version: 1,
-        },
-      ],
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "root",
-      version: 1,
-    },
-  },
-  lastSaved: 1656765599382,
-  source: "Playground",
-  version: "0.3.6",
-};
-
 export default function Editor({ setHTML = () => { }, setJSON = () => { }, setEditor = () => { }, setTemplateVariables = () => { } }) {
 
   const onChange = (editorState, editor) => {
     editor.update(() => {
       const rawHTML = $generateHtmlFromNodes(editor, null)
       const editorStateTextString = editorState.read(() => $getRoot().getTextContent());
-
-      // const rawJSON = JSON.stringify(editorState);
       setHTML(rawHTML);
       setJSON(editorState);
       setTemplateVariables(editorStateTextString);
