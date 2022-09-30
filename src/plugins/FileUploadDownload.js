@@ -35,19 +35,18 @@ export default class FileUploadDownload extends React.Component {
             this.setState({ fileType: "html" });
             const templateVariables = this.props.templateVariables;
             const templateVariablesArray = templateVariables.split(", ");
-            const templateVariablesHash = {};
+            // const templateVariablesHash = {};
             output = this.props.html;
-            debugger;
             templateVariablesArray.forEach(keyValString => {
                 const keyValArray = keyValString.split("=");
-                const key = keyValArray[0];
+                const key = "<span data-lexical-mention=\"true\">" + keyValArray[0] + "<\/span>";
                 const val = keyValArray[1];
-                const regex = new RegExp(`\\${key}`, "g");
-                output = output.replace(regex, val);
-                debugger;
+                const result = output.replaceAll(`${key}`, val);
+                output = result;
+                console.log(output);
+
             });
 
-            console.log(output);
         }
 
         // Download it
