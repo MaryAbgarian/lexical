@@ -1,2 +1,1 @@
-# lexical
-Created with CodeSandbox
+Editor created with Lexical API for DMS
